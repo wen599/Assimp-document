@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using the Animation Data &mdash; Asset-Importer-Lib March 2022 v5.4.3 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=b4ca3d7b"></script>
+        <script src="../_static/doctools.js?v=9bcbadda"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Asset-Importer-Lib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/index.html">General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/introduction.html#dependencies">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html">Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#extending-the-library">Extending the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#support-feedback">Support &amp; Feedback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#using-the-pre-built-libraries-with-visual-studio">Using the pre-built libraries with Visual-Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#build-on-all-platforms-using-vcpkg">Build on all platforms using vcpkg</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#building-the-library-from-scratch">Building the library from scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#windows-dll-build">Windows DLL Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#assimp-static-lib">Assimp static lib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#the-android-build">The Android build</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Assimp</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="use_the_lib.html">Working with the Asset-Importer-Lib</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../developer/developer.html">The Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API-Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../API/API-Documentation.html">The API-Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Asset-Importer-Lib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Using the Animation Data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/usage/animations.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-the-animation-data">
+<h1>Using the Animation Data<a class="headerlink" href="#using-the-animation-data" title="Link to this heading"></a></h1>
+<section id="animations">
+<span id="ai-anims"></span><h2>Animations<a class="headerlink" href="#animations" title="Link to this heading"></a></h2>
+<p>An imported scene may contain zero to n <strong>aiAnimation</strong> entries. An animation in this context is a set
+of keyframe sequences where each sequence describes the orientation of a single node in the hierarchy
+over a limited time span. Animations of this kind are usually used to animate the skeleton of
+a skinned mesh, but there are other uses as well.</p>
+<p>An <strong>aiAnimation</strong> has a duration. The duration as well as all time stamps are given in ticks. To get
+the correct timing, all time stamps thus have to be divided by aiAnimation::mTicksPerSecond. Beware,
+though, that certain combinations of file format and exporter don’t always store this information
+in the exported file. In this case, mTicksPerSecond is set to 0 to indicate the lack of knowledge.</p>
+<p>The <strong>aiAnimation</strong> consists of a series of <strong>aiNodeAnim</strong>. Each bone animation affects a single node in
+the node hierarchy only, the name specifying which node is affected. For this node the structure
+stores three separate key sequences: a vector key sequence for the position, a quaternion key sequence
+for the rotation, and another vector key sequence for the scaling. All 3d data is local to the
+coordinate space of the node’s parent, which means in the same space as the node’s transformation matrix.
+There might be cases where animation tracks refer to a non-existent node by their name, but this
+should not be the case in your everyday data.</p>
+<p>To apply such an animation you need to identify the animation tracks that refer to actual bones
+in your mesh. Then for every track:
+* Find the keys that lay right before the current anim time.
+* Optional: interpolate between these and the following keys.
+* Combine the calculated position, rotation, and scaling into a transformation matrix
+* Set the affected node’s transformation to the calculated matrix.</p>
+<p>If you need hints on how to convert to or from quaternions, have a look at the
+<a class="reference external" href="http://www.j3d.org/matrix_faq/matrfaq_latest.html">Matrix &amp; Quaternion FAQ</a>. I suggest
+using logarithmic interpolation for the scaling keys if you happen to need them - usually, you don’t
+need them at all.</p>
+</section>
+<section id="bones">
+<span id="ai-bones"></span><h2>Bones<a class="headerlink" href="#bones" title="Link to this heading"></a></h2>
+<p>A mesh may have a set of bones in the form of instances from the <strong>aiBone</strong> objects. Bones are a means to deform a mesh
+according to the movement of a skeleton. Each bone has a name and a set of vertices on which it has influence.
+Its offset matrix declares the transformation needed to transform from mesh space to the local space of this bone.</p>
+<p>Using the bones name you can find the corresponding node in the node hierarchy. This node in relation
+to the other bones’ nodes defines the skeleton of the mesh. Unfortunately, there might also be
+nodes that are not used by a bone in the mesh but still affect the pose of the skeleton because
+they have child nodes which are bones. So when creating the skeleton hierarchy for a mesh I
+suggest the following method:</p>
+<p>a. Create a map or a similar container to store which nodes are necessary for
+the skeleton. Pre-initialize it for all nodes with a “no”.</p>
+<ol class="loweralpha" start="2">
+<li><p>For each bone in the mesh:</p>
+<blockquote>
+<div><p>b1. Find the corresponding node in the scene’s hierarchy by comparing their names.</p>
+<p>b2. Mark this node as “yes” in the necessityMap.</p>
+<p>b3. Mark all of its parents the same way until you</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>find the mesh’s node or</p></li>
+<li><p>the parent of the mesh’s node.</p></li>
+</ol>
+</div></blockquote>
+</div></blockquote>
+</li>
+<li><p>Recursively iterate over the node hierarchy.</p></li>
+</ol>
+<p>c1. If the node is marked as necessary, copy it into the skeleton and check its children.</p>
+<p>c2. If the node is marked as not necessary, skip it and do not iterate over its children.</p>
+<p>Reasons: you need all the parent nodes to keep the transformation chain intact. For most
+file formats and modeling packages, the node hierarchy of the skeleton is either a child
+of the mesh node or a sibling of the mesh node but this is by no means a requirement so you shouldn’t rely on it.
+The node closest to the root node is your skeleton root, from there, you
+start copying the hierarchy. You can skip every branch without a node being a bone in the mesh -
+that’s why the algorithm skips the whole branch if the node is marked as “not necessary”.</p>
+<p>You should now have a mesh in your engine with a skeleton that is a subset of the imported hierarchy.</p>
+</section>
+<section id="blendshapes">
+<h2>Blendshapes<a class="headerlink" href="#blendshapes" title="Link to this heading"></a></h2>
+<p>ToDo!</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2025, Kim Kulling.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

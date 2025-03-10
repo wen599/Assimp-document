@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Working with the Asset-Importer-Lib &mdash; Asset-Importer-Lib March 2022 v5.4.3 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=b4ca3d7b"></script>
+        <script src="../_static/doctools.js?v=9bcbadda"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Developer Guide" href="../developer/developer.html" />
+    <link rel="prev" title="Data Structures" href="../about/quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Asset-Importer-Lib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/index.html">General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/introduction.html#dependencies">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html">Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#extending-the-library">Extending the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#support-feedback">Support &amp; Feedback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#using-the-pre-built-libraries-with-visual-studio">Using the pre-built libraries with Visual-Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#build-on-all-platforms-using-vcpkg">Build on all platforms using vcpkg</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#building-the-library-from-scratch">Building the library from scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#windows-dll-build">Windows DLL Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#assimp-static-lib">Assimp static lib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/quickstart.html#the-android-build">The Android build</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Assimp</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working with the Asset-Importer-Lib</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#importing-data">Importing Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#access-by-c-class-interface">Access by C++ class interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#access-by-plain-c-function-interface">Access by plain-c function interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-custom-io-logic-with-the-c-class-interface">Using custom IO logic with the C++ class interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-custom-io-logic-with-the-plain-c-function-interface">Using custom IO logic with the plain-c function interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logging">Logging</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#exporting-models">Exporting models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-node-hierarchy">The Node-Hierarchy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#meshes">Meshes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#materials">Materials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#textures">Textures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#material-system">Material-System</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ai-mat-tex">Textures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#constants">Constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c-api">C++-API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ai-c">C-API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-map-uv-channels-to-textures-matkey-uvwsrc">How to map UV channels to textures (MATKEY_UVWSRC)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pseudo-code-listing">Pseudo Code Listing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-access-shader-code">How to access shader-code</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#animation-overview">Animation Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#transformations">Transformations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#performance">Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profiling">Profiling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#threading">Threading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ai-overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thread-safety-using-assimp-concurrently-from-several-threads">Thread-safety / using Assimp concurrently from several threads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-threading">Internal threading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#importer-notes">Importer Notes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#blender">Blender</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ai-bl-overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#current-status">Current status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ifc">IFC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ai-ifc-status">Current status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metadata">Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ogre">Ogre</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ai-ogre-overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-will-be-loaded">What will be loaded?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-export-files-from-blender">How to export Files from Blender</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xml-format">XML-Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ai-properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notes-for-text-importers">Notes for text importers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notes-for-binary-importers">Notes for binary importers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utilities">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filling-materials">Filling materials</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#appendix-a">Appendix A</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#template-for-baseimporter-s-abstract-methods">Template for BaseImporter’s abstract methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../developer/developer.html">The Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API-Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../API/API-Documentation.html">The API-Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Asset-Importer-Lib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Working with the Asset-Importer-Lib</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/usage/use_the_lib.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <img alt="https://www.assimp.org/common/images/splash-color.png" src="https://www.assimp.org/common/images/splash-color.png" />
+<section id="working-with-the-asset-importer-lib">
+<span id="ai-access-cpp"></span><h1>Working with the Asset-Importer-Lib<a class="headerlink" href="#working-with-the-asset-importer-lib" title="Link to this heading"></a></h1>
+<section id="importing-data">
+<h2>Importing Data<a class="headerlink" href="#importing-data" title="Link to this heading"></a></h2>
+<section id="access-by-c-class-interface">
+<h3>Access by C++ class interface<a class="headerlink" href="#access-by-c-class-interface" title="Link to this heading"></a></h3>
+<p>The Asset-Importer-Lib can be accessed by both a class or flat function interface. The C++ class
+the interface is the preferred way of interaction: you create an instance of the class Assimp::Importer,
+maybe adjust some settings of it and then just call</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Assimp</span><span class="p">::</span><span class="n">Importer</span><span class="p">::</span><span class="n">ReadFile</span><span class="p">()</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>The class will read the files and process its data, handing back the imported data as a pointer to an aiScene
+to you. You can now extract the data you need from the file. The importer manages all the resources
+for itself. If the importer is destroyed, all the data that was created/read by it will be
+destroyed, too. So the easiest way to use the Importer is to create an instance locally, use its
+results and then simply let it go out of scope.</p>
+<p><em>C++ example:</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;assimp/Importer.hpp&gt;      // C++ importer interface</span>
+<span class="c1">#include &lt;assimp/scene.h&gt;           // Output data structure</span>
+<span class="c1">#include &lt;assimp/postprocess.h&gt;     // Post processing flags</span>
+
+<span class="nb">bool</span> <span class="n">DoTheImportThing</span><span class="p">(</span> <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">pFile</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">Create</span> <span class="n">an</span> <span class="n">instance</span> <span class="n">of</span> <span class="n">the</span> <span class="n">Importer</span> <span class="k">class</span>
+<span class="w">  </span><span class="nc">Assimp</span><span class="p">::</span><span class="n">Importer</span> <span class="n">importer</span><span class="p">;</span>
+
+  <span class="o">//</span> <span class="n">And</span> <span class="n">have</span> <span class="n">it</span> <span class="n">read</span> <span class="n">the</span> <span class="n">given</span> <span class="n">file</span> <span class="k">with</span> <span class="n">some</span> <span class="n">example</span> <span class="n">postprocessing</span>
+  <span class="o">//</span> <span class="n">Usually</span> <span class="o">-</span> <span class="k">if</span> <span class="n">speed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">the</span> <span class="n">most</span> <span class="n">important</span> <span class="n">aspect</span> <span class="k">for</span> <span class="n">you</span> <span class="o">-</span> <span class="n">you</span><span class="s1">&#39;ll</span>
+  <span class="o">//</span> <span class="n">probably</span> <span class="n">to</span> <span class="n">request</span> <span class="n">more</span> <span class="n">postprocessing</span> <span class="n">than</span> <span class="n">we</span> <span class="n">do</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">example</span><span class="o">.</span>
+  <span class="n">const</span> <span class="n">aiScene</span><span class="o">*</span> <span class="n">scene</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">ReadFile</span><span class="p">(</span> <span class="n">pFile</span><span class="p">,</span>
+    <span class="n">aiProcess_CalcTangentSpace</span>       <span class="o">|</span>
+    <span class="n">aiProcess_Triangulate</span>            <span class="o">|</span>
+    <span class="n">aiProcess_JoinIdenticalVertices</span>  <span class="o">|</span>
+    <span class="n">aiProcess_SortByPType</span><span class="p">);</span>
+
+  <span class="o">//</span> <span class="n">If</span> <span class="n">the</span> <span class="kn">import</span><span class="w"> </span><span class="nn">failed</span><span class="o">,</span><span class="w"> </span><span class="nn">report</span> <span class="n">it</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">nullptr</span> <span class="o">==</span> <span class="n">scene</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">DoTheErrorLogging</span><span class="p">(</span> <span class="n">importer</span><span class="o">.</span><span class="n">GetErrorString</span><span class="p">());</span>
+    <span class="k">return</span> <span class="n">false</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="o">//</span> <span class="n">Now</span> <span class="n">we</span> <span class="n">can</span> <span class="n">access</span> <span class="n">the</span> <span class="n">file</span><span class="s1">&#39;s contents.</span>
+  <span class="n">DoTheSceneProcessing</span><span class="p">(</span> <span class="n">scene</span><span class="p">);</span>
+
+  <span class="o">//</span> <span class="n">We</span><span class="s1">&#39;re done. Everything will be cleaned up by the importer destructor</span>
+  <span class="k">return</span> <span class="n">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>What exactly is read from the files and how you interpret it is described at the:ref:<cite>ai_data</cite>.
+The post-processing steps that the Assimp library can apply to the
+imported data are listed at #aiPostProcessSteps. See the &#64;ref pp Post processing page for more details.</p>
+<p>Note that the <strong>aiScene</strong> data structure returned is declared ‘const’. Yes, you can get rid of
+these 5 letters with a simple cast. Yes, you may do that. No, it’s not recommended (and it’s
+suicide in DLL builds if you try to use new or delete on any of the arrays in the scene).</p>
+</section>
+<section id="access-by-plain-c-function-interface">
+<span id="ai-access-c"></span><h3>Access by plain-c function interface<a class="headerlink" href="#access-by-plain-c-function-interface" title="Link to this heading"></a></h3>
+<p>The plain function interface is just as simple but requires you to manually call the clean-up
+after you’re done with the imported data. To start the import process, call <strong>aiImportFile()</strong>
+with the filename in question and the desired postprocessing flags like above. If the call
+is successful, an aiScene pointer with the imported data is handed back to you. When you’re
+done with the extraction of the data you’re interested in, call <strong>aiReleaseImport()</strong> on the
+imported scene to clean up all resources associated with the import.</p>
+<p><em>C-Example:</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;assimp/cimport.h&gt;        // Plain-C interface</span>
+<span class="c1">#include &lt;assimp/scene.h&gt;          // Output data structure</span>
+<span class="c1">#include &lt;assimp/postprocess.h&gt;    // Post processing flags</span>
+
+<span class="nb">bool</span> <span class="n">DoTheImportThing</span><span class="p">(</span> <span class="n">const</span> <span class="n">char</span><span class="o">*</span> <span class="n">pFile</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">Start</span> <span class="n">the</span> <span class="kn">import</span><span class="w"> </span><span class="nn">on</span> <span class="n">the</span> <span class="n">given</span> <span class="n">file</span> <span class="k">with</span> <span class="n">some</span> <span class="n">example</span> <span class="n">postprocessing</span>
+  <span class="o">//</span> <span class="n">Usually</span> <span class="o">-</span> <span class="k">if</span> <span class="n">speed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">the</span> <span class="n">most</span> <span class="n">important</span> <span class="n">aspect</span> <span class="k">for</span> <span class="n">you</span> <span class="o">-</span> <span class="n">you</span><span class="s1">&#39;ll t</span>
+  <span class="o">//</span> <span class="n">probably</span> <span class="n">to</span> <span class="n">request</span> <span class="n">more</span> <span class="n">postprocessing</span> <span class="n">than</span> <span class="n">we</span> <span class="n">do</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">example</span><span class="o">.</span>
+  <span class="n">const</span> <span class="n">struct</span> <span class="n">aiScene</span><span class="o">*</span> <span class="n">scene</span> <span class="o">=</span> <span class="n">aiImportFile</span><span class="p">(</span> <span class="n">pFile</span><span class="p">,</span>
+    <span class="n">aiProcess_CalcTangentSpace</span>       <span class="o">|</span>
+    <span class="n">aiProcess_Triangulate</span>            <span class="o">|</span>
+    <span class="n">aiProcess_JoinIdenticalVertices</span>  <span class="o">|</span>
+    <span class="n">aiProcess_SortByPType</span><span class="p">);</span>
+
+  <span class="o">//</span> <span class="n">If</span> <span class="n">the</span> <span class="kn">import</span><span class="w"> </span><span class="nn">failed</span><span class="o">,</span><span class="w"> </span><span class="nn">report</span> <span class="n">it</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">NULL</span> <span class="o">==</span> <span class="n">scene</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">DoTheErrorLogging</span><span class="p">(</span> <span class="n">aiGetErrorString</span><span class="p">());</span>
+    <span class="k">return</span> <span class="n">false</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="o">//</span> <span class="n">Now</span> <span class="n">we</span> <span class="n">can</span> <span class="n">access</span> <span class="n">the</span> <span class="n">file</span><span class="s1">&#39;s contents</span>
+  <span class="n">DoTheSceneProcessing</span><span class="p">(</span> <span class="n">scene</span><span class="p">);</span>
+
+  <span class="o">//</span> <span class="n">We</span><span class="s1">&#39;re done. Release all resources associated with this import</span>
+  <span class="n">aiReleaseImport</span><span class="p">(</span> <span class="n">scene</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="using-custom-io-logic-with-the-c-class-interface">
+<span id="ai-custom-io"></span><h3>Using custom IO logic with the C++ class interface<a class="headerlink" href="#using-custom-io-logic-with-the-c-class-interface" title="Link to this heading"></a></h3>
+<p>The Assimp library needs to access files internally. This of course applies to the file you want
+to read, but also to additional files in the same folder for certain file formats. By default,
+standard C/C++ IO logic is used to access these files. If your application works in a special
+environment where custom logic is needed to access the specified files, you have to supply
+custom implementations of IOStream and IOSystem. A shortened example might look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;assimp/IOStream.hpp&gt;</span>
+<span class="c1">#include &lt;assimp/IOSystem.hpp&gt;</span>
+
+<span class="o">//</span> <span class="n">My</span> <span class="n">own</span> <span class="n">implementation</span> <span class="n">of</span> <span class="n">IOStream</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyIOStream</span> <span class="p">:</span> <span class="n">public</span> <span class="n">Assimp</span><span class="p">::</span><span class="n">IOStream</span> <span class="p">{</span>
+  <span class="n">friend</span> <span class="k">class</span><span class="w"> </span><span class="nc">MyIOSystem</span><span class="p">;</span>
+
+<span class="n">protected</span><span class="p">:</span>
+  <span class="o">//</span> <span class="n">Constructor</span> <span class="n">protected</span> <span class="k">for</span> <span class="n">private</span> <span class="n">usage</span> <span class="n">by</span> <span class="n">MyIOSystem</span>
+  <span class="n">MyIOStream</span><span class="p">();</span>
+
+<span class="n">public</span><span class="p">:</span>
+  <span class="o">~</span><span class="n">MyIOStream</span><span class="p">();</span>
+  <span class="n">size_t</span> <span class="n">Read</span><span class="p">(</span> <span class="n">void</span><span class="o">*</span> <span class="n">pvBuffer</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">pSize</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">pCount</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+  <span class="n">size_t</span> <span class="n">Write</span><span class="p">(</span> <span class="n">const</span> <span class="n">void</span><span class="o">*</span> <span class="n">pvBuffer</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">pSize</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">pCount</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+  <span class="n">aiReturn</span> <span class="n">Seek</span><span class="p">(</span> <span class="n">size_t</span> <span class="n">pOffset</span><span class="p">,</span> <span class="n">aiOrigin</span> <span class="n">pOrigin</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+  <span class="n">size_t</span> <span class="n">Tell</span><span class="p">()</span> <span class="n">const</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+  <span class="n">size_t</span> <span class="n">FileSize</span><span class="p">()</span> <span class="n">const</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+  <span class="n">void</span> <span class="n">Flush</span> <span class="p">()</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="o">//</span> <span class="n">Fisher</span> <span class="n">Price</span> <span class="o">-</span> <span class="n">My</span> <span class="n">First</span> <span class="n">Filesystem</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyIOSystem</span> <span class="p">:</span> <span class="n">public</span> <span class="n">Assimp</span><span class="p">::</span><span class="n">IOSystem</span> <span class="p">{</span>
+  <span class="n">MyIOSystem</span><span class="p">()</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+  <span class="o">~</span><span class="n">MyIOSystem</span><span class="p">()</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+
+  <span class="o">//</span> <span class="n">Check</span> <span class="n">whether</span> <span class="n">a</span> <span class="n">specific</span> <span class="n">file</span> <span class="n">exists</span>
+  <span class="nb">bool</span> <span class="n">Exists</span><span class="p">(</span> <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">pFile</span><span class="p">)</span> <span class="n">const</span> <span class="p">{</span>
+    <span class="o">..</span>
+  <span class="p">}</span>
+
+  <span class="o">//</span> <span class="n">Get</span> <span class="n">the</span> <span class="n">path</span> <span class="n">delimiter</span> <span class="n">character</span> <span class="n">we</span><span class="s1">&#39;d like to see</span>
+  <span class="n">char</span> <span class="n">GetOsSeparator</span><span class="p">()</span> <span class="n">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s1">&#39;/&#39;</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="o">//</span> <span class="o">...</span> <span class="ow">and</span> <span class="k">finally</span> <span class="n">a</span> <span class="n">method</span> <span class="n">to</span> <span class="nb">open</span> <span class="n">a</span> <span class="n">custom</span> <span class="n">stream</span>
+  <span class="n">IOStream</span><span class="o">*</span> <span class="n">Open</span><span class="p">(</span> <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">pFile</span><span class="p">,</span> <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">pMode</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">new</span> <span class="n">MyIOStream</span><span class="p">(</span> <span class="o">...</span> <span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">void</span> <span class="n">Close</span><span class="p">(</span> <span class="n">IOStream</span><span class="o">*</span> <span class="n">pFile</span><span class="p">)</span> <span class="p">{</span> <span class="n">delete</span> <span class="n">pFile</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Now that your IO system is implemented, supply an instance of it to the Importer object by calling</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Assimp</span><span class="p">::</span><span class="n">Importer</span><span class="p">::</span><span class="n">SetIOHandler</span><span class="p">()</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>An example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">DoTheImportThing</span><span class="p">(</span> <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">pFile</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">Assimp</span><span class="p">::</span><span class="n">Importer</span> <span class="n">importer</span><span class="p">;</span>
+  <span class="o">//</span> <span class="n">put</span> <span class="n">my</span> <span class="n">custom</span> <span class="n">IO</span> <span class="n">handling</span> <span class="ow">in</span> <span class="n">place</span>
+  <span class="n">importer</span><span class="o">.</span><span class="n">SetIOHandler</span><span class="p">(</span> <span class="n">new</span> <span class="n">MyIOSystem</span><span class="p">());</span>
+
+  <span class="o">//</span> <span class="n">the</span> <span class="kn">import</span><span class="w"> </span><span class="nn">process</span> <span class="n">will</span> <span class="n">now</span> <span class="n">use</span> <span class="n">this</span> <span class="n">implementation</span> <span class="n">to</span> <span class="n">access</span> <span class="nb">any</span> <span class="n">file</span>
+  <span class="n">importer</span><span class="o">.</span><span class="n">ReadFile</span><span class="p">(</span> <span class="n">pFile</span><span class="p">,</span> <span class="n">SomeFlag</span> <span class="o">|</span> <span class="n">SomeOtherFlag</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="using-custom-io-logic-with-the-plain-c-function-interface">
+<span id="ai-custom-io-c"></span><h3>Using custom IO logic with the plain-c function interface<a class="headerlink" href="#using-custom-io-logic-with-the-plain-c-function-interface" title="Link to this heading"></a></h3>
+<p>The C interface also provides a way to override the file system. Control is not as fine-grained as for C++ although
+surely enough for almost any purpose. The process is simple:</p>
+<ul class="simple">
+<li><p>Include cfileio.h</p></li>
+<li><p>Fill an aiFileIO structure with custom file system callbacks (they’re self-explanatory as they work similarly to the CRT’s fXXX functions)</p></li>
+<li><p>and pass it as a parameter to #aiImportFileEx</p></li>
+</ul>
+</section>
+<section id="logging">
+<span id="ai-logging"></span><h3>Logging<a class="headerlink" href="#logging" title="Link to this heading"></a></h3>
+<p>The Assimp-library provides an easy mechanism to log messages. For instance, if you want to check the state of your
+import and you just want to see, after which preprocessing step the import process was aborted you can take a look
+into the log.
+Per default, the Assimp-library provides a default log implementation, where you can log your user-specific message
+by calling it a singleton with the requested logging type. To see how this works take a look at this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">using</span> <span class="n">namespace</span> <span class="n">Assimp</span><span class="p">;</span>
+
+<span class="o">//</span> <span class="n">Create</span> <span class="n">a</span> <span class="n">logger</span> <span class="n">instance</span>
+<span class="n">DefaultLogger</span><span class="p">::</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">Logger</span><span class="p">::</span><span class="n">VERBOSE</span><span class="p">);</span>
+
+<span class="o">//</span> <span class="n">Now</span> <span class="n">I</span> <span class="n">am</span> <span class="n">ready</span> <span class="k">for</span> <span class="n">logging</span> <span class="n">my</span> <span class="n">stuff</span>
+<span class="n">DefaultLogger</span><span class="p">::</span><span class="n">get</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;this is my info-call&quot;</span><span class="p">);</span>
+
+<span class="o">//</span> <span class="n">Kill</span> <span class="n">it</span> <span class="n">after</span> <span class="n">the</span> <span class="n">work</span> <span class="ow">is</span> <span class="n">done</span>
+<span class="n">DefaultLogger</span><span class="p">::</span><span class="n">kill</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>At first, you have to create the default-logger-instance (create). Now you are ready to rock and can log a
+little bit around. After that, you should kill it to release the singleton instance.</p>
+<p>If you want to integrate the assimp-log into your own GUI it may be helpful to have a mechanism writing
+the logs into your own log windows. The logger interface provides this by implementing an interface called <strong>LogStream</strong>.
+You can attach and detach this log stream to the default-logger instance or any implementation derived from Logger.
+Just derivate your own logger from the abstract base-class <strong>LogStream</strong> and overwrite the write method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Example</span> <span class="n">stream</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">myStream</span> <span class="p">:</span> <span class="n">public</span> <span class="n">LogStream</span> <span class="p">{</span>
+<span class="n">public</span><span class="p">:</span>
+    <span class="o">//</span> <span class="n">Write</span> <span class="n">something</span> <span class="n">using</span> <span class="n">your</span> <span class="n">own</span> <span class="n">functionality</span>
+    <span class="n">void</span> <span class="n">write</span><span class="p">(</span><span class="n">const</span> <span class="n">char</span><span class="o">*</span> <span class="n">message</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">::</span><span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="o">//</span> <span class="n">Select</span> <span class="n">the</span> <span class="n">kinds</span> <span class="n">of</span> <span class="n">messages</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">receive</span> <span class="n">on</span> <span class="n">this</span> <span class="n">log</span> <span class="n">stream</span>
+<span class="n">const</span> <span class="n">unsigned</span> <span class="nb">int</span> <span class="n">severity</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">::</span><span class="n">Debugging</span><span class="o">|</span><span class="n">Logger</span><span class="p">::</span><span class="n">Info</span><span class="o">|</span><span class="n">Logger</span><span class="p">::</span><span class="n">Err</span><span class="o">|</span><span class="n">Logger</span><span class="p">::</span><span class="n">Warn</span><span class="p">;</span>
+
+<span class="o">//</span> <span class="n">Attaching</span> <span class="n">it</span> <span class="n">to</span> <span class="n">the</span> <span class="n">default</span> <span class="n">logger</span>
+<span class="n">Assimp</span><span class="p">::</span><span class="n">DefaultLogger</span><span class="p">::</span><span class="n">get</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">attachStream</span><span class="p">(</span> <span class="n">new</span> <span class="n">myStream</span><span class="p">,</span> <span class="n">severity</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>The severity level controls the kind of message which will be written into
+the attached stream. If you just want to log errors and warnings set the warn
+and error severity flag for those severities. It is also possible to remove
+a self-defined log stream from an error severity by detaching it with the severity
+flag set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">unsigned</span> <span class="nb">int</span> <span class="n">severity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">severity</span> <span class="o">|=</span> <span class="n">Logger</span><span class="p">::</span><span class="n">Debugging</span><span class="p">;</span>
+
+<span class="o">//</span> <span class="n">Detach</span> <span class="n">debug</span> <span class="n">messages</span> <span class="kn">from</span><span class="w"> </span><span class="nn">your</span> <span class="bp">self</span> <span class="n">defined</span> <span class="n">stream</span>
+<span class="n">Assimp</span><span class="p">::</span><span class="n">DefaultLogger</span><span class="p">::</span><span class="n">get</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">attachStream</span><span class="p">(</span> <span class="n">new</span> <span class="n">myStream</span><span class="p">,</span> <span class="n">severity</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>If you want to implement your own logger just derive from the abstract base class
+<strong>Logger</strong> and overwrite the methods debug, info, warn, and error.</p>
+<p>If you want to see the debug messages in a debug-configured build, the Logger-interface
+provides a logging severity. You can set it by calling the following method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Assimp</span><span class="p">::</span><span class="n">DefaultLogger</span><span class="p">::</span><span class="n">get</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">setLogSeverity</span><span class="p">(</span> <span class="n">LogSeverity</span> <span class="n">log_severity</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>The normal logging severity supports just the basic stuff like info, warnings, and errors.
+In the verbose level very fine-grained debug messages will be logged, too. Note that this
+kind of logging might decrease import performance.</p>
+</section>
+</section>
+<section id="exporting-models">
+<span id="ai-data"></span><h2>Exporting models<a class="headerlink" href="#exporting-models" title="Link to this heading"></a></h2>
+<p>A valid <strong>aiScene</strong> instance can be used to export into a requested assset-format.</p>
+<p>For instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">exporterTest</span><span class="p">()</span> <span class="n">override</span> <span class="p">{</span>
+    <span class="p">::</span><span class="n">Assimp</span><span class="p">::</span><span class="n">Importer</span> <span class="n">importer</span><span class="p">;</span>
+    <span class="p">::</span><span class="n">Assimp</span><span class="p">::</span><span class="n">Exporter</span> <span class="n">exporter</span><span class="p">;</span>
+    <span class="n">const</span> <span class="n">aiScene</span> <span class="o">*</span><span class="n">scene</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">ReadFile</span><span class="p">(</span><span class="n">ASSIMP_TEST_MODELS_DIR</span> <span class="s2">&quot;/OBJ/spider.obj&quot;</span><span class="p">,</span> <span class="n">aiProcess_ValidateDataStructure</span><span class="p">);</span>
+    <span class="n">exporter</span><span class="o">.</span><span class="n">Export</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">,</span> <span class="n">ASSIMP_TEST_MODELS_DIR</span> <span class="s2">&quot;/OBJ/spider_out.obj&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The following file formats are currently supported:</p>
+<ul class="simple">
+<li><p>collada</p></li>
+<li><p>x</p></li>
+<li><p>stp</p></li>
+<li><p>obj</p></li>
+<li><p>objnomtl</p></li>
+<li><p>stl</p></li>
+<li><p>stlb</p></li>
+<li><p>ply</p></li>
+<li><p>plyb</p></li>
+<li><p>3ds</p></li>
+<li><p>gltf2</p></li>
+<li><p>glb2</p></li>
+<li><p>gltf</p></li>
+<li><p>glb</p></li>
+<li><p>assbin</p></li>
+<li><p>assxml</p></li>
+<li><p>x3d</p></li>
+<li><p>fbx</p></li>
+<li><p>fbxa</p></li>
+<li><p>m3da</p></li>
+<li><p>3mf</p></li>
+<li><p>pbrt</p></li>
+<li><p>assjson</p></li>
+</ul>
+</section>
+<section id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Link to this heading"></a></h2>
+<section id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h3>
+<p>The Assimp-Library returns the imported data in a collection of structures. <strong>aiScene</strong> forms the root
+of the data, from here you gain access to all the nodes, meshes, materials, animations, or textures
+that was read from the imported file. The <strong>aiScene</strong> is returned from a successful call to
+<strong>Assimp::Importer::ReadFile()</strong>, <strong>aiImportFile()</strong> or <strong>aiImportFileEx()</strong> - see the <span class="xref std std-ref">ai_usage</span>
+for further information on how to use the library.</p>
+<p>By default, all 3D data is provided in a right-handed coordinate system such as OpenGL uses. In
+this coordinate system, +X points to the right, +Y points upwards and +Z points out of the screen
+towards the viewer. Several modeling packages such as 3D Studio Max use this coordinate system as well
+(or a rotated variant of it).
+By contrast, some other environments use left-handed coordinate systems, a prominent example being
+DirectX. If you need the imported data to be in a left-handed coordinate system, supply the
+#aiProcess_MakeLeftHanded flag to the <strong>ReadFile()</strong> function call.</p>
+<p>The output face winding is counterclockwise. Use #aiProcess_FlipWindingOrder to get CW data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x2</span>
+
+            <span class="n">x1</span>
+    <span class="n">x0</span>
+</pre></div>
+</div>
+<p>Outputted polygons can be literally everything: they’re probably concave, self-intersecting or non-planar,
+although our built-in triangulation (#aiProcess_Triangulate postprocessing step) doesn’t handle the two latter.</p>
+<p>The output UV coordinate system has its origin in the lower-left corner:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="n">x</span><span class="o">|</span><span class="mi">1</span><span class="n">y</span> <span class="o">----------</span> <span class="mi">1</span><span class="n">x</span><span class="o">|</span><span class="mi">1</span><span class="n">y</span>
+ <span class="o">|</span>                <span class="o">|</span>
+ <span class="o">|</span>                <span class="o">|</span>
+ <span class="o">|</span>                <span class="o">|</span>
+<span class="mi">0</span><span class="n">x</span><span class="o">|</span><span class="mi">0</span><span class="n">y</span> <span class="o">----------</span> <span class="mi">1</span><span class="n">x</span><span class="o">|</span><span class="mi">0</span><span class="n">y</span>
+</pre></div>
+</div>
+<p>Use the #aiProcess_FlipUVs flag to get UV coordinates with the upper-left corner as origin.</p>
+<p>A typical 4x4 matrix including a translational part looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X1</span>  <span class="n">Y1</span>  <span class="n">Z1</span>  <span class="n">T1</span>
+<span class="n">X2</span>  <span class="n">Y2</span>  <span class="n">Z2</span>  <span class="n">T2</span>
+<span class="n">X3</span>  <span class="n">Y3</span>  <span class="n">Z3</span>  <span class="n">T3</span>
+ <span class="mi">0</span>   <span class="mi">0</span>   <span class="mi">0</span>   <span class="mi">1</span>
+</pre></div>
+</div>
+<p>with &lt;tt&gt;(X1, X2, X3)&lt;/tt&gt; being the local X base vector, &lt;tt&gt;(Y1, Y2, Y3)&lt;/tt&gt; being the local
+Y base vector, &lt;tt&gt;(Z1, Z2, Z3)&lt;/tt&gt; being the local Z base vector and &lt;tt&gt;(T1, T2, T3)&lt;/tt&gt; being the
+offset of the local origin (the translational part).
+All matrices in the library use row-major storage order. That means that the matrix elements are
+stored row-by-row, i.e. they end up like this in memory:
+&lt;tt&gt;[X1, Y1, Z1, T1, X2, Y2, Z2, T2, X3, Y3, Z3, T3, 0, 0, 0, 1]&lt;/tt&gt;.</p>
+<p>Note that this is neither the OpenGL format nor the DirectX format, because both of them specify the
+matrix layout such that the translational part occupies three consecutive addresses in memory (so those
+matrices end with &lt;tt&gt;[…, T1, T2, T3, 1]&lt;/tt&gt;), whereas the translation in an Assimp matrix is found at
+the offsets 3, 7 and 11 (spread across the matrix). You can transpose an Assimp matrix to end up with
+the format that OpenGL and DirectX mandate. To be very precise: The transposition has nothing
+to do with a left-handed or right-handed coordinate system but ‘converts’ between row-major and
+column-major storage formats.</p>
+<p>&lt;b&gt;11.24.09:&lt;/b&gt; We changed the orientation of our quaternions to the most common convention to avoid confusion.
+However, if you’re a previous user of Assimp and you update the library to revisions beyond SVNREV 502,
+you have to adapt your animation loading code to match the new quaternion orientation.</p>
+</section>
+<section id="the-node-hierarchy">
+<span id="ai-hierarchy"></span><h3>The Node-Hierarchy<a class="headerlink" href="#the-node-hierarchy" title="Link to this heading"></a></h3>
+<p>Nodes are little-named entities in the scene that have a place and orientation relative to their parents.
+Starting from the scene’s root node all nodes can have 0 to x child nodes, thus forming a hierarchy.
+They form the base on which the scene is built: a node can refer to 0..x meshes, can be referred to
+by a bone of a mesh, or can be animated by a key sequence of animation. DirectX calls them “frames”,
+others call them “objects”, and we call them <strong>aiNode</strong>.</p>
+<p>A node can potentially refer to single or multiple meshes. The meshes are not stored inside the node, but
+instead in an array of <strong>aiMesh</strong> inside the aiScene. A node only refers to them by their array index. This also means
+that multiple nodes can refer to the same mesh, which provides a simple form of instancing. A mesh referred to
+in this way lives in the node’s local coordinate system. If you want the mesh’s orientation in global
+space, you’d have to concatenate the transformations from the referring node and all of its parents.</p>
+<p>Most of the file formats don’t really support complex scenes, though, but a single model only. But there are
+more complex formats such as .3ds, .x, or .collada scenes which may contain an arbitrarily complex
+hierarchy of nodes and meshes. I myself would suggest a recursive filter function such as the
+following pseudocode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">CopyNodesWithMeshes</span><span class="p">(</span> <span class="n">aiNode</span> <span class="n">node</span><span class="p">,</span> <span class="n">SceneObject</span> <span class="n">targetParent</span><span class="p">,</span> <span class="n">Matrix4x4</span> <span class="n">accTransform</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">SceneObject</span> <span class="n">parent</span><span class="p">;</span>
+  <span class="n">Matrix4x4</span> <span class="n">transform</span><span class="p">;</span>
+
+  <span class="o">//</span><span class="n">If</span> <span class="n">node</span> <span class="n">has</span> <span class="n">meshes</span><span class="p">,</span> <span class="n">create</span> <span class="n">a</span> <span class="n">new</span> <span class="n">scene</span> <span class="nb">object</span> <span class="k">for</span> <span class="n">it</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">node</span><span class="o">.</span><span class="n">mNumMeshes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">SceneObject</span> <span class="n">newObject</span> <span class="o">=</span> <span class="n">new</span> <span class="n">SceneObject</span><span class="p">;</span>
+        <span class="n">targetParent</span><span class="o">.</span><span class="n">addChild</span><span class="p">(</span> <span class="n">newObject</span><span class="p">);</span>
+        <span class="o">//</span> <span class="n">copy</span> <span class="n">the</span> <span class="n">meshes</span>
+        <span class="n">CopyMeshes</span><span class="p">(</span> <span class="n">node</span><span class="p">,</span> <span class="n">newObject</span><span class="p">);</span>
+
+        <span class="o">//</span><span class="n">The</span> <span class="n">new</span> <span class="nb">object</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">parent</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">child</span> <span class="n">nodes</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">newObject</span><span class="p">;</span>
+        <span class="n">transform</span><span class="o">.</span><span class="n">SetUnity</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="o">//</span> <span class="k">if</span> <span class="n">no</span> <span class="n">meshes</span><span class="p">,</span> <span class="n">skip</span> <span class="n">the</span> <span class="n">node</span><span class="p">,</span> <span class="n">but</span> <span class="n">keep</span> <span class="n">its</span> <span class="n">transformation</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">targetParent</span><span class="p">;</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">mTransformation</span> <span class="o">*</span> <span class="n">accTransform</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="o">//</span> <span class="k">continue</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">child</span> <span class="n">nodes</span>
+  <span class="k">for</span><span class="p">(</span> <span class="nb">all</span> <span class="n">node</span><span class="o">.</span><span class="n">mChildren</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">CopyNodesWithMeshes</span><span class="p">(</span> <span class="n">node</span><span class="o">.</span><span class="n">mChildren</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This function copies a node into the scene graph if it has children. If yes, a new scene object
+is created for the import node and the node’s meshes are copied over. If not, no object is created.
+Potential child objects will be added to the old targetParent, but their transformation will be correct
+in respect to the global space. This function also works great in filtering the bone nodes - nodes
+that form the bone hierarchy for another mesh/node, but don’t have any mesh themselves.</p>
+</section>
+<section id="meshes">
+<span id="ai-meshes"></span><h3>Meshes<a class="headerlink" href="#meshes" title="Link to this heading"></a></h3>
+<p>All meshes of an imported scene are stored in an array of aiMesh* inside the aiScene. Nodes refer
+to them by their index in the array and provide the coordinate system for them, too. One mesh uses
+only a single material everywhere - if parts of the model use a different material, this part is
+moved to a separate mesh at the same node. The mesh refers to its material in the same way as the
+node refers to its meshes: materials are stored in an array inside <strong>aiScene</strong>, and the mesh stores only
+an index into this array.</p>
+<p>An <strong>aiMesh</strong> is defined by a series of data channels. The presence of these data channels is defined
+by the contents of the imported file: by default, there are only those data channels present in the mesh
+that were also found in the file. The only channels guaranteed to be always present are aiMesh::mVertices
+and aiMesh::mFaces. You can test for the presence of other data by testing the pointers against NULL
+or using the helper functions provided by <strong>aiMesh</strong>. You may also specify several post-processing flags
+at Importer::ReadFile() to let Assimp calculate or recalculate additional data channels for you.</p>
+<p>At the moment, a single aiMesh may contain a set of triangles and polygons. A single vertex does always
+have a position. In addition, it may have one normal, one tangent, and bitangent, zero to <strong>AI_MAX_NUMBER_OF_TEXTURECOORDS</strong>
+(4 at the moment) texture coords and zero to AI_MAX_NUMBER_OF_COLOR_SETS (4) vertex colors. In addition,
+a mesh may or may not have a set of bones described by an array of <strong>aiBone</strong> structures. How to interpret
+the bone information is described later on.</p>
+</section>
+<section id="materials">
+<span id="ai-material"></span><h3>Materials<a class="headerlink" href="#materials" title="Link to this heading"></a></h3>
+<p>See the:ref:<cite>ai_material</cite> Material System Page.</p>
+</section>
+<section id="textures">
+<span id="ai-textures"></span><h3>Textures<a class="headerlink" href="#textures" title="Link to this heading"></a></h3>
+<p>Normally textures used by assets are stored in separate files, however,
+there are file formats embedding their textures directly into the model file.
+Such textures are loaded into an <strong>aiTexture</strong> structure.</p>
+<p>In previous versions, the path from the query for <cite>AI_MATKEY_TEXTURE(textureType, index)</cite> would be
+<cite>*&lt;index&gt;</cite> where <cite>&lt;index&gt;</cite> is the index of the texture in aiScene::mTextures. Now this call will
+return a file path for embedded textures in FBX files. To test if it is an embedded texture use
+aiScene::GetEmbeddedTexture. If the returned pointer is not null, it is embedded and can be loaded
+from the data structure. If it is null, search for a separate file. Other file types still use the
+old behavior.</p>
+<p>If you rely on the old behavior, you can use Assimp::Importer::SetPropertyBool with the key
+#AI_CONFIG_IMPORT_FBX_EMBEDDED_TEXTURES_LEGACY_NAMING to force the old behavior.</p>
+<dl class="simple">
+<dt>There are two cases:</dt><dd><ul class="simple">
+<li><p>The texture is NOT compressed. Its color data is directly stored in the <strong>aiTexture</strong> structure as an array of
+aiTexture::mWidth * aiTexture::mHeight
+<strong>aiTexel</strong> structures. Each <strong>aiTexel</strong> represents a
+pixel (or “texel”) of the texture image. The color data is stored in an unsigned RGBA8888 format,
+which can be easily used for both Direct3D and OpenGL (swizzling the order of the color
+components might be necessary).  RGBA8888 has been chosen because it is well-known, easy to use
+, and natively supported by nearly all graphics APIs.</p></li>
+<li><p>This applies if aiTexture::mHeight == 0 is fulfilled. Then, the texture is stored in a compressed
+format such as DDS or PNG. The term “compressed” does not mean that the texture data must
+actually be compressed, however, the texture was found in the model file as if it was stored in a
+separate file on the hard disk. Appropriate decoders (such as libjpeg, libpng, D3DX, DevIL) are
+required to load these textures.  aiTexture::mWidth specifies the size of the texture data in
+bytes, aiTexture::pcData is a pointer to the raw image data and aiTexture::achFormatHint is
+either zeroed or contains the most common file extension of the embedded texture’s format. This
+value is only set if Assimp is able to determine the file format.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+<section id="material-system">
+<span id="ai-materials"></span><h2>Material-System<a class="headerlink" href="#material-system" title="Link to this heading"></a></h2>
+<p>All materials are stored in an array of <strong>aiMaterial</strong> inside the aiScene.</p>
+<p>Each aiMesh refers to one
+material by its index in the array. Due to the vastly diverging definitions and usages of material
+parameters, there is no hard definition of a material structure. Instead, a material is defined by
+a set of properties accessible by their names. Have a look at assimp/material.h to see what types of
+properties are defined. In this file, there are also various functions defined to test for the
+presence of certain properties in a material and retrieve their values.</p>
+<section id="ai-mat-tex">
+<span id="id1"></span><h3>Textures<a class="headerlink" href="#ai-mat-tex" title="Link to this heading"></a></h3>
+<p>Textures are organized in stacks, each stack being evaluated independently. The final color value from a particular texture stack is used in the shading equation.
+For example, the computed color value of the diffuse texture stack (aiTextureType_DIFFUSE) is multiplied with the amount of incoming diffuse light to obtain the
+final diffuse color of a pixel.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Stack</p></th>
+<th class="head"><p>Resulting equation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Constant base color</p></td>
+<td><p>color</p></td>
+</tr>
+<tr class="row-odd"><td><p>Blend operation 0</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Strength factor 0</p></td>
+<td><p>0.25*</p></td>
+</tr>
+<tr class="row-odd"><td><p>Texture 0</p></td>
+<td><p>texture_0</p></td>
+</tr>
+<tr class="row-even"><td><p>Blend operation 1</p></td>
+<td><p>x</p></td>
+</tr>
+<tr class="row-odd"><td><p>Strength factor 1</p></td>
+<td><p>1.0*</p></td>
+</tr>
+<tr class="row-even"><td><p>Texture 1</p></td>
+<td><p>texture_1</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="constants">
+<span id="ai-keys"></span><h3>Constants<a class="headerlink" href="#constants" title="Link to this heading"></a></h3>
+<p>All material key constants start with ‘AI_MATKEY’ as a prefix.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Meaning</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NAME</p></td>
+<td><p>aiString</p></td>
+<td><p>n/a</p></td>
+<td><p>The name of the material, if available.</p></td>
+<td><p>Ignored by &lt;tt&gt;aiProcess_RemoveRedundantMaterials. Materials are considered equal even if their names are different.</p></td>
+</tr>
+<tr class="row-odd"><td><p>COLOR_DIFFUSE</p></td>
+<td><p>aiColor3D</p></td>
+<td><p>black (0,0,0)</p></td>
+<td><p>Diffuse color of the material. This is typically scaled by the amount of incoming diffuse light (e.g. using gouraud shading)</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p>COLOR_SPECULAR</p></td>
+<td><p>aiColor3D</p></td>
+<td><p>black (0,0,0)</p></td>
+<td><p>Specular color of the material. This is typically scaled by the amount of incoming specular light (e.g. using phong shading)</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-odd"><td><p>COLOR_AMBIENT</p></td>
+<td><p>aiColor3D</p></td>
+<td><p>black (0,0,0)</p></td>
+<td><p>Ambient color of the material. This is typically scaled by the amount of ambient light</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p>COLOR_EMISSIVE</p></td>
+<td><p>aiColor3D</p></td>
+<td><p>black (0,0,0)</p></td>
+<td><p>Emissive color of the material. This is the amount of light emitted by the object. In real time applications it will usually not affect surrounding objects, but raytracing applications may wish to treat emissive objects as light sources.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-odd"><td><p>COLOR_TRANSPARENT</p></td>
+<td><p>aiColor3D</p></td>
+<td><p>black (0,0,0)</p></td>
+<td><p>Defines the transparent color of the material, this is the color to be multiplied with the color of translucent light to construct the final ‘destination color’ for a particular position in the screen buffer.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p>COLOR_REFLECTIVE</p></td>
+<td><p>aiColor3D</p></td>
+<td><p>&lt;td&gt;black (0,0,0)</p></td>
+<td><p>Defines the reflective color of the material. This is typically scaled by the amount of incoming light from the direction of mirror reflection. Usually combined with an environment lightmap of some kind for real-time applications.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-odd"><td><p>REFLECTIVITY</p></td>
+<td><p>float</p></td>
+<td><p>0.0</p></td>
+<td><p>Scales the reflective color of the material.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p>WIREFRAME</p></td>
+<td><p>int</p></td>
+<td><p>false</p></td>
+<td><p>Specifies whether wireframe rendering must be turned on for the material. 0 for false, !0 for true.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-odd"><td><p>TWOSIDED</p></td>
+<td><p>int</p></td>
+<td><p>false</p></td>
+<td><p>Specifies whether meshes using this material must be rendered without backface culling. 0 for false, !0 for true.</p></td>
+<td><p>Some importers set this property if they don’t know whether the output face order is right. As long as it is not set, you may safely enable backface culling.</p></td>
+</tr>
+<tr class="row-even"><td><p>SHADING_MODEL</p></td>
+<td><p>int</p></td>
+<td><p>gouraud</p></td>
+<td><p>One of the #aiShadingMode enumerated values. Defines the library shading model to use for (real time) rendering to approximate the original look of the material as closely as possible.</p></td>
+<td><p>The presence of this key might indicate a more complex material. If absent, assume phong shading only if a specular exponent is given.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BLEND_FUNC</p></td>
+<td><p>int</p></td>
+<td><p>false</p></td>
+<td><p>One of the #aiBlendMode enumerated values. Defines how the final color value in the screen buffer is computed from the given color at that position and the newly computed color from the material. Simply said, alpha blending settings.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p>OPACITY</p></td>
+<td><p>float</p></td>
+<td><p>1.0</p></td>
+<td><p>Defines the opacity of the material in a range between 0..1.</p></td>
+<td><p>Use this value to decide whether you have to activate alpha blending for rendering. <strong>OPACITY!=1</strong> usually also implies <strong>TWOSIDED=1</strong> to avoid cull artifacts.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SHININESS</p></td>
+<td><p>float</p></td>
+<td><p>0.f</p></td>
+<td><p>Defines the shininess of a phong-shaded material. This is actually the exponent of the phong specular equation</p></td>
+<td><p><strong>SHININESS=0</strong> is equivalent to <strong>SHADING_MODEL = aiShadingMode_Gouraud</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>SHININESS_STRENGTH</p></td>
+<td><p>float</p></td>
+<td><p>1.0</p></td>
+<td><p>Scales the specular color of the material.</p></td>
+<td><p>This value is kept separate from the specular color by most modelers, and so do we.</p></td>
+</tr>
+<tr class="row-odd"><td><p>REFRACTI</p></td>
+<td><p>float</p></td>
+<td><p>1.0</p></td>
+<td><p>Defines the Index Of Refraction for the material. That’s not supported by most file formats.</p></td>
+<td><p>Might be of interest for raytracing.</p></td>
+</tr>
+<tr class="row-even"><td><p>TEXTURE(t,n)</p></td>
+<td><p>aiString</p></td>
+<td><p>n/a</p></td>
+<td><p>Defines the path of the n’th texture on the stack ‘t’, where ‘n’ is any value &gt;= 0 and ‘t’ is one of the #aiTextureType enumerated values. A file path to an external file or an embedded texture. Use aiScene::GetEmbeddedTexture to test if it is embedded for FBX files, in other cases embedded textures start with ‘*’ followed by an index into aiScene::mTextures.</p></td>
+<td><p>See the &#64;ref mat_tex section above. Also see &#64;ref textures for a more information about texture retrieval.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TEXBLEND(t,n)</p></td>
+<td><p>float&lt;/td&gt;</p></td>
+<td><p>n/a</p></td>
+<td><p>Defines the strength the n’th texture on the stack ‘t’. All color components (rgb) are multiplied with this factor <em>before</em> any further processing is done.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p>TEXOP(t,n)</p></td>
+<td><p>int</p></td>
+<td><p>n/a</p></td>
+<td><p>One of the #aiTextureOp enumerated values. Defines the arithmetic operation to be used to combine the n’th texture on the stack ‘t’
+with the n-1’th. <strong>TEXOP(t,0)</strong> refers to the blend operation between the base color for this stack (e.g. <strong>COLOR_DIFFUSE</strong> for the diffuse stack)
+and the first texture.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-odd"><td><p>MAPPING(t,n)</p></td>
+<td><p>int</p></td>
+<td><p>n/a</p></td>
+<td><p>Defines how the input mapping coordinates for sampling the n’th texture on the stack ‘t’ are computed. Usually explicit UV coordinates are provided,
+but some model file formats might also be using basic shapes, such as spheres or cylinders, to project textures onto meshes.</p></td>
+<td><p>See the ‘Textures’ section below. #aiProcess_GenUVCoords can be used to let Assimp compute proper UV coordinates from projective mappings.</p></td>
+</tr>
+<tr class="row-even"><td><p>UVWSRC(t,n)</p></td>
+<td><p>int</p></td>
+<td><p>n/a</p></td>
+<td><p>Defines the UV channel to be used as input mapping coordinates for sampling the n’th texture on the stack ‘t’. All meshes assigned to this material
+share the same UV channel setup</p></td>
+<td><p>Presence of this key implies <strong>MAPPING(t,n)</strong> to be #aiTextureMapping_UV. See &#64;ref uvwsrc for more details.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MAPPINGMODE_U(t,n)</p></td>
+<td><p>int</p></td>
+<td><p>n/a</p></td>
+<td><p>Any of the #aiTextureMapMode enumerated values. Defines the texture wrapping mode on the x axis for sampling the n’th texture on the stack ‘t’.
+‘Wrapping’ occurs whenever UVs lie outside the <strong>0..1</strong> range.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p>MAPPINGMODE_V(t,n)</p></td>
+<td><p>int</p></td>
+<td><p>n/a</p></td>
+<td><p>Wrap mode on the v axis. See <em>MAPPINGMODE_U</em>.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-odd"><td><p>TEXMAP_AXIS(t,n)</p></td>
+<td><p>aiVector3D</p></td>
+<td><p>n/a</p></td>
+<td><p>Defines the base axis to to compute the mapping coordinates for the n’th texture on the stack ‘t’ from. This is not required for UV-mapped textures.
+For instance, if &lt;tt&gt;MAPPING(t,n)&lt;/tt&gt; is #aiTextureMapping_SPHERE, U and V would map to longitude and latitude of a sphere around the given axis.
+The axis is given in local mesh space.</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p>TEXFLAGS(t,n)</p></td>
+<td><p>int</p></td>
+<td><p>n/a</p></td>
+<td><p>Defines miscellaneous flag for the n’th texture on the stack ‘t’. This is a bitwise combination of the #aiTextureFlags enumerated values.</p></td>
+<td><p>n/a</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="c-api">
+<span id="ai-cpp"></span><h3>C++-API<a class="headerlink" href="#c-api" title="Link to this heading"></a></h3>
+<p>Retrieving a property from a material is done using various utility functions. For C++ it’s simply calling aiMaterial::Get()</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aiMaterial</span><span class="o">*</span> <span class="n">mat</span> <span class="o">=</span> <span class="o">.....</span>
+
+<span class="o">//</span> <span class="n">The</span> <span class="n">generic</span> <span class="n">way</span>
+<span class="k">if</span><span class="p">(</span><span class="n">AI_SUCCESS</span> <span class="o">!=</span> <span class="n">mat</span><span class="o">-&gt;</span><span class="n">Get</span><span class="p">(</span><span class="o">&lt;</span><span class="n">material</span><span class="o">-</span><span class="n">key</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">where</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">store</span><span class="o">&gt;</span><span class="p">))</span> <span class="p">{</span>
+   <span class="o">//</span> <span class="n">handle</span> <span class="n">epic</span> <span class="n">failure</span> <span class="n">here</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Simple, isn’t it? To get the name of a material you would use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aiString</span> <span class="n">name</span><span class="p">;</span>
+<span class="n">mat</span><span class="o">-&gt;</span><span class="n">Get</span><span class="p">(</span><span class="n">AI_MATKEY_NAME</span><span class="p">,</span><span class="n">name</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Or for the diffuse color (‘color’ won’t be modified if the property is not set)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aiColor3D</span> <span class="n">color</span> <span class="p">(</span><span class="mf">0.</span><span class="n">f</span><span class="p">,</span><span class="mf">0.</span><span class="n">f</span><span class="p">,</span><span class="mf">0.</span><span class="n">f</span><span class="p">);</span>
+<span class="n">mat</span><span class="o">-&gt;</span><span class="n">Get</span><span class="p">(</span><span class="n">AI_MATKEY_COLOR_DIFFUSE</span><span class="p">,</span><span class="n">color</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>&lt;b&gt;Note:&lt;/b&gt; Get() is actually a template with explicit specializations for aiColor3D, aiColor4D, aiString, float, int and some others.
+Make sure that the type of the second parameter matches the expected data type of the material property (no compile-time check yet!).
+Don’t follow this advice if you wish to encounter very strange results.</p>
+</section>
+<section id="ai-c">
+<span id="id2"></span><h3>C-API<a class="headerlink" href="#ai-c" title="Link to this heading"></a></h3>
+<p>For good old C it’s slightly different. Take a look at the aiGetMaterialGet&lt;data-type&gt; functions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aiMaterial</span><span class="o">*</span> <span class="n">mat</span> <span class="o">=</span> <span class="o">.....</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">AI_SUCCESS</span> <span class="o">!=</span> <span class="n">aiGetMaterialFloat</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="o">&lt;</span><span class="n">material</span><span class="o">-</span><span class="n">key</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">where</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">store</span><span class="o">&gt;</span><span class="p">))</span> <span class="p">{</span>
+   <span class="o">//</span> <span class="n">handle</span> <span class="n">epic</span> <span class="n">failure</span> <span class="n">here</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To get the name of a material you would use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aiString</span> <span class="n">name</span><span class="p">;</span>
+<span class="n">aiGetMaterialString</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="n">AI_MATKEY_NAME</span><span class="p">,</span><span class="o">&amp;</span><span class="n">name</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Or for the diffuse color (‘color’ won’t be modified if the property is not set)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aiColor3D</span> <span class="n">color</span> <span class="p">(</span><span class="mf">0.</span><span class="n">f</span><span class="p">,</span><span class="mf">0.</span><span class="n">f</span><span class="p">,</span><span class="mf">0.</span><span class="n">f</span><span class="p">);</span>
+<span class="n">aiGetMaterialColor</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="n">AI_MATKEY_COLOR_DIFFUSE</span><span class="p">,</span><span class="o">&amp;</span><span class="n">color</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="how-to-map-uv-channels-to-textures-matkey-uvwsrc">
+<span id="ai-uvsrc"></span><h3>How to map UV channels to textures (MATKEY_UVWSRC)<a class="headerlink" href="#how-to-map-uv-channels-to-textures-matkey-uvwsrc" title="Link to this heading"></a></h3>
+<p>The MATKEY_UVWSRC property is only present if the source format doesn’t specify an explicit mapping from
+textures to UV channels. Many formats don’t do this and assimp is not aware of a perfect rule either.</p>
+<p>Your handling of UV channels needs to be flexible therefore. Our recommendation is to use logic like this
+to handle most cases properly:</p>
+<dl class="simple">
+<dt>::</dt><dd><dl class="simple">
+<dt>have only one uv channel?</dt><dd><p>assign channel 0 to all textures and break</p>
+</dd>
+<dt>for all textures</dt><dd><dl class="simple">
+<dt>have uvwsrc for this texture?</dt><dd><p>assign channel specified in uvwsrc</p>
+</dd>
+<dt>else</dt><dd><p>assign channels in ascending order for all texture stacks,
+i.e. diffuse1 gets channel 1, opacity0 gets channel 0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<section id="pseudo-code-listing">
+<span id="ai-pseudo"></span><h4>Pseudo Code Listing<a class="headerlink" href="#pseudo-code-listing" title="Link to this heading"></a></h4>
+<p>For completeness, the following is a very rough pseudo-code sample showing how to evaluate Assimp materials in your
+shading pipeline. You’ll probably want to limit your handling of all those material keys to a reasonable subset suitable for your purposes
+(for example most 3d engines won’t support highly complex multi-layer materials, but many 3d modellers do).</p>
+<p>Also note that this sample is targeted at a (shader-based) rendering pipeline for real-time graphics.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="o">---------------------------------------------------------------------------------------</span>
+<span class="o">//</span> <span class="n">Evaluate</span> <span class="n">multiple</span> <span class="n">textures</span> <span class="n">stacked</span> <span class="n">on</span> <span class="n">top</span> <span class="n">of</span> <span class="n">each</span> <span class="n">other</span>
+<span class="n">float3</span> <span class="n">EvaluateStack</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">For</span> <span class="n">the</span> <span class="s1">&#39;diffuse&#39;</span> <span class="n">stack</span><span class="o">.</span><span class="n">base_color</span> <span class="n">would</span> <span class="n">be</span> <span class="n">COLOR_DIFFUSE</span>
+  <span class="o">//</span> <span class="ow">and</span> <span class="n">TEXTURE</span><span class="p">(</span><span class="n">aiTextureType_DIFFUSE</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="n">the</span> <span class="n">n</span><span class="s1">&#39;th texture.</span>
+
+  <span class="n">float3</span> <span class="n">base</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">base_color</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">every</span> <span class="n">texture</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">stack</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">assuming</span> <span class="n">we</span> <span class="n">have</span> <span class="n">explicit</span> <span class="o">&amp;</span> <span class="n">pre</span> <span class="n">transformed</span> <span class="n">UVs</span> <span class="k">for</span> <span class="n">this</span> <span class="n">texture</span>
+    <span class="n">float3</span> <span class="n">color</span> <span class="o">=</span> <span class="n">SampleTexture</span><span class="p">(</span><span class="n">texture</span><span class="p">,</span><span class="n">uv</span><span class="p">);</span>
+
+    <span class="o">//</span> <span class="n">scale</span> <span class="n">by</span> <span class="n">texture</span> <span class="n">blend</span> <span class="n">factor</span>
+    <span class="n">color</span> <span class="o">*=</span> <span class="n">texture</span><span class="o">.</span><span class="n">blend</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">texture</span><span class="o">.</span><span class="n">op</span> <span class="o">==</span> <span class="n">add</span><span class="p">)</span>
+      <span class="n">base</span> <span class="o">+=</span> <span class="n">color</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">texture</span><span class="o">.</span><span class="n">op</span> <span class="o">==</span> <span class="n">multiply</span><span class="p">)</span>
+      <span class="n">base</span> <span class="o">*=</span> <span class="n">color</span><span class="p">;</span>
+    <span class="k">else</span> <span class="o">//</span> <span class="n">other</span> <span class="n">blend</span> <span class="n">ops</span> <span class="n">go</span> <span class="n">here</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">base</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">//</span> <span class="o">---------------------------------------------------------------------------------------</span>
+<span class="o">//</span> <span class="n">Compute</span> <span class="n">the</span> <span class="n">diffuse</span> <span class="n">contribution</span> <span class="k">for</span> <span class="n">a</span> <span class="n">pixel</span>
+<span class="n">float3</span> <span class="n">ComputeDiffuseContribution</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">shading</span> <span class="o">==</span> <span class="n">none</span><span class="p">)</span>
+     <span class="k">return</span> <span class="n">float3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+
+  <span class="n">float3</span> <span class="n">intensity</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">all</span> <span class="n">lights</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">float</span> <span class="n">fac</span> <span class="o">=</span> <span class="mf">1.</span><span class="n">f</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">shading</span> <span class="o">==</span> <span class="n">gouraud</span><span class="p">)</span>
+      <span class="n">fac</span> <span class="o">=</span>  <span class="n">lambert</span><span class="o">-</span><span class="n">term</span> <span class="o">..</span>
+    <span class="k">else</span> <span class="o">//</span> <span class="n">other</span> <span class="n">shading</span> <span class="n">modes</span> <span class="n">go</span> <span class="n">here</span>
+
+    <span class="o">//</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">different</span> <span class="n">types</span> <span class="n">of</span> <span class="n">lights</span><span class="p">,</span> <span class="n">such</span> <span class="k">as</span> <span class="n">point</span> <span class="ow">or</span> <span class="n">spot</span> <span class="n">lights</span>
+    <span class="o">//</span> <span class="o">...</span>
+
+    <span class="o">//</span> <span class="ow">and</span> <span class="k">finally</span> <span class="nb">sum</span> <span class="n">the</span> <span class="n">contribution</span> <span class="n">of</span> <span class="n">this</span> <span class="n">single</span> <span class="n">light</span> <span class="o">...</span>
+    <span class="n">intensity</span> <span class="o">+=</span> <span class="n">light</span><span class="o">.</span><span class="n">diffuse_color</span> <span class="o">*</span> <span class="n">fac</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="o">//</span> <span class="o">...</span> <span class="ow">and</span> <span class="n">combine</span> <span class="n">the</span> <span class="n">final</span> <span class="n">incoming</span> <span class="n">light</span> <span class="k">with</span> <span class="n">the</span> <span class="n">diffuse</span> <span class="n">color</span>
+  <span class="k">return</span> <span class="n">EvaluateStack</span><span class="p">(</span><span class="n">diffuse</span><span class="p">)</span> <span class="o">*</span> <span class="n">intensity</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">//</span> <span class="o">---------------------------------------------------------------------------------------</span>
+<span class="o">//</span> <span class="n">Compute</span> <span class="n">the</span> <span class="n">specular</span> <span class="n">contribution</span> <span class="k">for</span> <span class="n">a</span> <span class="n">pixel</span>
+<span class="n">float3</span> <span class="n">ComputeSpecularContribution</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">shading</span> <span class="o">==</span> <span class="n">gouraud</span> <span class="o">||</span> <span class="n">specular_strength</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">specular_exponent</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">float3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+
+  <span class="n">float3</span> <span class="n">intensity</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">all</span> <span class="n">lights</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">float</span> <span class="n">fac</span> <span class="o">=</span> <span class="mf">1.</span><span class="n">f</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">shading</span> <span class="o">==</span> <span class="n">phong</span><span class="p">)</span>
+      <span class="n">fac</span> <span class="o">=</span>  <span class="n">phong</span><span class="o">-</span><span class="n">term</span> <span class="o">..</span>
+    <span class="k">else</span> <span class="o">//</span> <span class="n">other</span> <span class="n">specular</span> <span class="n">shading</span> <span class="n">modes</span> <span class="n">go</span> <span class="n">here</span>
+
+    <span class="o">//</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">different</span> <span class="n">types</span> <span class="n">of</span> <span class="n">lights</span><span class="p">,</span> <span class="n">such</span> <span class="k">as</span> <span class="n">point</span> <span class="ow">or</span> <span class="n">spot</span> <span class="n">lights</span>
+    <span class="o">//</span> <span class="o">...</span>
+
+    <span class="o">//</span> <span class="ow">and</span> <span class="k">finally</span> <span class="nb">sum</span> <span class="n">the</span> <span class="n">specular</span> <span class="n">contribution</span> <span class="n">of</span> <span class="n">this</span> <span class="n">single</span> <span class="n">light</span> <span class="o">...</span>
+    <span class="n">intensity</span> <span class="o">+=</span> <span class="n">light</span><span class="o">.</span><span class="n">specular_color</span> <span class="o">*</span> <span class="n">fac</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="o">//</span> <span class="o">...</span> <span class="ow">and</span> <span class="n">combine</span> <span class="n">the</span> <span class="n">final</span> <span class="n">specular</span> <span class="n">light</span> <span class="k">with</span> <span class="n">the</span> <span class="n">specular</span> <span class="n">color</span>
+  <span class="k">return</span> <span class="n">EvaluateStack</span><span class="p">(</span><span class="n">specular</span><span class="p">)</span> <span class="o">*</span> <span class="n">intensity</span> <span class="o">*</span> <span class="n">specular_strength</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">//</span> <span class="o">---------------------------------------------------------------------------------------</span>
+<span class="o">//</span> <span class="n">Compute</span> <span class="n">the</span> <span class="n">ambient</span> <span class="n">contribution</span> <span class="k">for</span> <span class="n">a</span> <span class="n">pixel</span>
+<span class="n">float3</span> <span class="n">ComputeAmbientContribution</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">shading</span> <span class="o">==</span> <span class="n">none</span><span class="p">)</span>
+     <span class="k">return</span> <span class="n">float3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+
+  <span class="n">float3</span> <span class="n">intensity</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">all</span> <span class="n">lights</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">float</span> <span class="n">fac</span> <span class="o">=</span> <span class="mf">1.</span><span class="n">f</span><span class="p">;</span>
+
+    <span class="o">//</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">different</span> <span class="n">types</span> <span class="n">of</span> <span class="n">lights</span><span class="p">,</span> <span class="n">such</span> <span class="k">as</span> <span class="n">point</span> <span class="ow">or</span> <span class="n">spot</span> <span class="n">lights</span>
+    <span class="o">//</span> <span class="o">...</span>
+
+    <span class="o">//</span> <span class="ow">and</span> <span class="k">finally</span> <span class="nb">sum</span> <span class="n">the</span> <span class="n">ambient</span> <span class="n">contribution</span> <span class="n">of</span> <span class="n">this</span> <span class="n">single</span> <span class="n">light</span> <span class="o">...</span>
+    <span class="n">intensity</span> <span class="o">+=</span> <span class="n">light</span><span class="o">.</span><span class="n">ambient_color</span> <span class="o">*</span> <span class="n">fac</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="o">//</span> <span class="o">...</span> <span class="ow">and</span> <span class="n">combine</span> <span class="n">the</span> <span class="n">final</span> <span class="n">ambient</span> <span class="n">light</span> <span class="k">with</span> <span class="n">the</span> <span class="n">ambient</span> <span class="n">color</span>
+  <span class="k">return</span> <span class="n">EvaluateStack</span><span class="p">(</span><span class="n">ambient</span><span class="p">)</span> <span class="o">*</span> <span class="n">intensity</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">//</span> <span class="o">---------------------------------------------------------------------------------------</span>
+<span class="o">//</span> <span class="n">Compute</span> <span class="n">the</span> <span class="n">final</span> <span class="n">color</span> <span class="n">value</span> <span class="k">for</span> <span class="n">a</span> <span class="n">pixel</span>
+<span class="o">//</span> <span class="nd">@param</span> <span class="n">prev</span> <span class="n">Previous</span> <span class="n">color</span> <span class="n">at</span> <span class="n">that</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">framebuffer</span>
+<span class="n">float4</span> <span class="n">PimpMyPixel</span> <span class="p">(</span><span class="n">float4</span> <span class="n">prev</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="o">..</span> <span class="n">handle</span> <span class="n">displacement</span> <span class="n">mapping</span> <span class="n">per</span> <span class="n">vertex</span>
+  <span class="o">//</span> <span class="o">..</span> <span class="n">handle</span> <span class="n">bump</span><span class="o">/</span><span class="n">normal</span> <span class="n">mapping</span>
+
+  <span class="o">//</span> <span class="n">Get</span> <span class="nb">all</span> <span class="n">single</span> <span class="n">light</span> <span class="n">contribution</span> <span class="n">terms</span>
+  <span class="n">float3</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">ComputeDiffuseContribution</span><span class="p">();</span>
+  <span class="n">float3</span> <span class="n">spec</span> <span class="o">=</span> <span class="n">ComputeSpecularContribution</span><span class="p">();</span>
+  <span class="n">float3</span> <span class="n">ambi</span> <span class="o">=</span> <span class="n">ComputeAmbientContribution</span><span class="p">();</span>
+
+  <span class="o">//</span> <span class="o">..</span> <span class="ow">and</span> <span class="n">compute</span> <span class="n">the</span> <span class="n">final</span> <span class="n">color</span> <span class="n">value</span> <span class="k">for</span> <span class="n">this</span> <span class="n">pixel</span>
+  <span class="n">float3</span> <span class="n">color</span> <span class="o">=</span> <span class="n">diff</span> <span class="o">+</span> <span class="n">spec</span> <span class="o">+</span> <span class="n">ambi</span><span class="p">;</span>
+  <span class="n">float3</span> <span class="n">opac</span>  <span class="o">=</span> <span class="n">EvaluateStack</span><span class="p">(</span><span class="n">opacity</span><span class="p">);</span>
+
+  <span class="o">//</span> <span class="n">note</span> <span class="n">the</span> <span class="o">*</span><span class="n">slightly</span><span class="o">*</span> <span class="n">strange</span> <span class="n">meaning</span> <span class="n">of</span> <span class="n">additive</span> <span class="ow">and</span> <span class="n">multiplicative</span> <span class="n">blending</span> <span class="n">here</span> <span class="o">...</span>
+  <span class="o">//</span> <span class="n">those</span> <span class="n">names</span> <span class="n">will</span> <span class="n">most</span> <span class="n">likely</span> <span class="n">be</span> <span class="n">changed</span> <span class="ow">in</span> <span class="n">future</span> <span class="n">versions</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">blend_func</span> <span class="o">==</span> <span class="n">add</span><span class="p">)</span>
+       <span class="k">return</span> <span class="n">prev</span><span class="o">+</span><span class="n">color</span><span class="o">*</span><span class="n">opac</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">blend_func</span> <span class="o">==</span> <span class="n">multiply</span><span class="p">)</span>
+       <span class="k">return</span> <span class="n">prev</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">opac</span><span class="p">)</span><span class="o">+</span><span class="n">prev</span><span class="o">*</span><span class="n">opac</span><span class="p">;</span>
+
+   <span class="k">return</span> <span class="n">color</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="how-to-access-shader-code">
+<span id="ai-shdacc"></span><h3>How to access shader-code<a class="headerlink" href="#how-to-access-shader-code" title="Link to this heading"></a></h3>
+<p>You can get the shadercode like a texture (AI_MATKEY_GLOBAL_SHADERLANG and AI_MATKEY_SHADER_VERTEX, …)
+You can get assigned shader sources by using the following material keys:</p>
+<ul class="simple">
+<li><p><em>AI_MATKEY_GLOBAL_SHADERLANG</em>  To get the used shader language.</p></li>
+<li><p><em>AI_MATKEY_SHADER_VERTEX</em>      Assigned vertex shader code stored as a string.</p></li>
+<li><p><em>AI_MATKEY_SHADER_FRAGMENT</em>    Assigned fragment shader code stored as a string.</p></li>
+<li><p><em>AI_MATKEY_SHADER_GEO</em>         Assigned geometry shader code stored as a string.</p></li>
+<li><p><em>AI_MATKEY_SHADER_TESSELATION</em> Assigned tesselation shader code stored as a string.</p></li>
+<li><p><em>AI_MATKEY_SHADER_PRIMITIVE</em>   Assigned primitive shader code stored as a string.</p></li>
+<li><p><em>AI_MATKEY_SHADER_COMPUTE</em>     Assigned compute shader code stored as a string.</p></li>
+</ul>
+</section>
+</section>
+<section id="animation-overview">
+<span id="ai-animationoverview"></span><h2>Animation Overview<a class="headerlink" href="#animation-overview" title="Link to this heading"></a></h2>
+<p>&lt;a href=”<a class="reference external" href="http://ogldev.atspace.co.uk/www/tutorial38/tutorial38.html">http://ogldev.atspace.co.uk/www/tutorial38/tutorial38.html</a>”&gt;This external tutorial&lt;/a&gt;
+has working code to get started implementing animations using bone matrix array in the vertex shader.
+(If using <strong>glm</strong> (OpenGL math library), cross-reference with &lt;a href=”<a class="reference external" href="http://www.xphere.me/2019/05/bones-animation-with-openglassimpglm/">http://www.xphere.me/2019/05/bones-animation-with-openglassimpglm/</a>”&gt;this page&lt;/a&gt;
+which has useful tips on converting between <strong>Assimp</strong> and <strong>glm</strong> objects)</p>
+<section id="transformations">
+<span id="ai-transformations"></span><h3>Transformations<a class="headerlink" href="#transformations" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>This diagram shows how you can calculate your transformation matrices for an animated character:
+.. image:: ../images/AnimationOverview.png</p>
+</div></blockquote>
+</section>
+</section>
+<section id="performance">
+<span id="ai-perf"></span><h2>Performance<a class="headerlink" href="#performance" title="Link to this heading"></a></h2>
+<section id="overview">
+<span id="ai-perf-overview"></span><h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>This page discusses general performance issues related to <strong>Assimp</strong>.</p>
+</section>
+<section id="profiling">
+<span id="ai-perf-profile"></span><h3>Profiling<a class="headerlink" href="#profiling" title="Link to this heading"></a></h3>
+<p>Assimp has built-in support for &lt;i&gt;very&lt;/i&gt; basic profiling and time measurement. To turn it on, set the &lt;tt&gt;GLOB_MEASURE_TIME&lt;/tt&gt;
+configuration switch to &lt;tt&gt;true&lt;/tt&gt; (nonzero). Results are dumped to the log file, so you need to set up
+an appropriate logger implementation with at least one output stream first (see the &#64;:ref:<cite>ai_logging</cite> for the details.).</p>
+<p>Note that these measurements are based on a single run of the importer and each of the post-processing steps, so
+a single result set is far away from being significant in a statistical sense. While precision can be improved
+by running the test multiple times, the low accuracy of the timings may render the results useless
+for smaller files.</p>
+<p>A sample report looks like this (some unrelated log messages omitted, entries grouped for clarity):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Debug, T5488: START `total`
+Info,  T5488: Found a matching importer for this file format
+
+
+Debug, T5488: START `import`
+Info,  T5488: BlendModifier: Applied the `Subdivision` modifier to `OBMonkey`
+Debug, T5488: END   `import`, dt= 3.516 s
+
+
+Debug, T5488: START `preprocess`
+Debug, T5488: END   `preprocess`, dt= 0.001 s
+Info,  T5488: Entering post processing pipeline
+
+
+Debug, T5488: START `postprocess`
+Debug, T5488: RemoveRedundantMatsProcess begin
+Debug, T5488: RemoveRedundantMatsProcess finished
+Debug, T5488: END   `postprocess`, dt= 0.001 s
+
+
+Debug, T5488: START `postprocess`
+Debug, T5488: TriangulateProcess begin
+Info,  T5488: TriangulateProcess finished. All polygons have been triangulated.
+Debug, T5488: END   `postprocess`, dt= 3.415 s
+
+
+Debug, T5488: START `postprocess`
+Debug, T5488: SortByPTypeProcess begin
+Info,  T5488: Points: 0, Lines: 0, Triangles: 1, Polygons: 0 (Meshes, X = removed)
+Debug, T5488: SortByPTypeProcess finished
+
+Debug, T5488: START `postprocess`
+Debug, T5488: JoinVerticesProcess begin
+Debug, T5488: Mesh 0 (unnamed) | Verts in: 503808 out: 126345 | ~74.922
+Info,  T5488: JoinVerticesProcess finished | Verts in: 503808 out: 126345 | ~74.9
+Debug, T5488: END   `postprocess`, dt= 2.052 s
+
+Debug, T5488: START `postprocess`
+Debug, T5488: FlipWindingOrderProcess begin
+Debug, T5488: FlipWindingOrderProcess finished
+Debug, T5488: END   `postprocess`, dt= 0.006 s
+
+
+Debug, T5488: START `postprocess`
+Debug, T5488: LimitBoneWeightsProcess begin
+Debug, T5488: LimitBoneWeightsProcess end
+Debug, T5488: END   `postprocess`, dt= 0.001 s
+
+
+Debug, T5488: START `postprocess`
+Debug, T5488: ImproveCacheLocalityProcess begin
+Debug, T5488: Mesh 0 | ACMR in: 0.851622 out: 0.718139 | ~15.7
+Info,  T5488: Cache relevant are 1 meshes (251904 faces). Average output ACMR is 0.718139
+Debug, T5488: ImproveCacheLocalityProcess finished.
+Debug, T5488: END   `postprocess`, dt= 1.903 s
+
+
+Info,  T5488: Leaving post processing pipeline
+Debug, T5488: END   `total`, dt= 11.269 s
+</pre></div>
+</div>
+<p>In this particular example only one fourth of the total import time was spent on the actual importing, while the rest of the
+time got consumed by the #aiProcess_Triangulate, #aiProcess_JoinIdenticalVertices and #aiProcess_ImproveCacheLocality
+postprocessing steps. A wise selection of postprocessing steps is therefore essential to getting good performance.
+Of course this depends on the individual requirements of your application, in many of the typical use cases of assimp performance won’t
+matter (i.e. in an offline content pipeline).</p>
+</section>
+<section id="threading">
+<span id="ai-threading"></span><h3>Threading<a class="headerlink" href="#threading" title="Link to this heading"></a></h3>
+<p>You can use the Asset-Importer-Library in a separate thread context. Just make sure that the resources used by the thread are not shared.
+At this moment, assimp will not make sure that it is safe over different thread contexts.</p>
+</section>
+<section id="ai-overview">
+<span id="id3"></span><h3>Overview<a class="headerlink" href="#ai-overview" title="Link to this heading"></a></h3>
+<p>This page discusses both <strong>Assimp</strong> scalability in threaded environments and the precautions to be taken in order to
+use it from multiple threads concurrently.</p>
+</section>
+<section id="thread-safety-using-assimp-concurrently-from-several-threads">
+<span id="ai-threadsafety"></span><h3>Thread-safety / using Assimp concurrently from several threads<a class="headerlink" href="#thread-safety-using-assimp-concurrently-from-several-threads" title="Link to this heading"></a></h3>
+<p>The library can be accessed by multiple threads simultaneously, as long as the
+following prerequisites are fulfilled:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Users of the C++-API should ensure that they use a dedicated #Assimp::Importer instance for each thread.
+Constructing instances of #Assimp::Importer is expensive, so it might be a good idea to
+let every thread maintain its own thread-local instance (which can be used to
+load as many files as necessary).</p></li>
+<li><p>The C-API is thread-safe.</p></li>
+<li><p>When supplying custom IO logic, one must make sure the underlying implementation is thread-safe.</p></li>
+<li><p>Custom log streams or logger replacements have to be thread-safe, too.</p></li>
+</ul>
+</div></blockquote>
+<p>Multiple concurrent imports may or may not be beneficial, however. For certain file formats in conjunction with
+little or no post-processing IO times tend to be the performance bottleneck. Intense post-processing together
+with ‘slow’ file formats like X or Collada might scale well with multiple concurrent imports.</p>
+</section>
+<section id="internal-threading">
+<span id="ai-automt"></span><h3>Internal threading<a class="headerlink" href="#internal-threading" title="Link to this heading"></a></h3>
+<p>Internal multi-threading is not currently implemented.</p>
+</section>
+<section id="resources">
+<span id="ai-res"></span><h3>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h3>
+<p>This page lists some useful resources for <strong>Assimp</strong>. Note that, even though the core team has an eye on them,
+we cannot guarantee the accuracy of third-party information. If in doubt, it’s best to ask either on the
+mailing list or on our forums on SF.net.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Assimp</strong> comes with some sample applications, these can be found in the &lt;i&gt;./samples&lt;/i&gt; folder. Don’t forget to read the &lt;i&gt;README&lt;/i&gt; file.</p></li>
+<li><p><a class="reference external" href="http://www.drivenbynostalgia.com/files/AssimpOpenGLDemo.rar">Assimp-GL-Demo</a> - OpenGl animation sample using the library’s animation import facilities.</p></li>
+<li><p><a class="reference external" href="http://nolimitsdesigns.com/game-design/open-asset-import-library-animation-loader/">Assimp-Animation-Loader</a> is another utility to
+simplify animation playback.</p></li>
+<li><p><a class="reference external" href="http://ogldev.atspace.co.uk/www/tutorial22/tutorial22.html">Assimp-Animations</a> - Tutorial “Loading models using the Open Asset Import Library”, out of a series of OpenGL tutorials.</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<section id="importer-notes">
+<span id="ai-importer-notes"></span><h2>Importer Notes<a class="headerlink" href="#importer-notes" title="Link to this heading"></a></h2>
+<section id="blender">
+<span id="ai-blender"></span><h3>Blender<a class="headerlink" href="#blender" title="Link to this heading"></a></h3>
+<p>This section contains implementation notes for the Blender3D importer.</p>
+<p><strong>Important:  the Blender importer is deprecated.</strong></p>
+</section>
+<section id="ai-bl-overview">
+<span id="id4"></span><h3>Overview<a class="headerlink" href="#ai-bl-overview" title="Link to this heading"></a></h3>
+<p><strong>Assimp</strong> provides a self-contained reimplementation of Blender’s so-called SDNA system ( <a href="#id11"><span class="problematic" id="id12">`Notes on SDNA http://www.blender.org/development/architecture/notes-on-sdna/`_</span></a> ).
+SDNA allows Blender to be fully backward and forward-compatible and to exchange
+files across all platforms. The BLEND format is thus a non-trivial binary monster and the loader tries to read the most of it,
+naturally limited by the scope of the #aiScene output data structure.
+Consequently, if Blender is the only modeling tool in your asset workflow, consider writing a
+custom exporter from Blender if <strong>Assimp</strong> format coverage does not meet the requirements.</p>
+</section>
+<section id="current-status">
+<span id="ai-bl-status"></span><h3>Current status<a class="headerlink" href="#current-status" title="Link to this heading"></a></h3>
+<p>The Blender loader does not support animations yet, but is apart from that considered relatively stable.</p>
+<p>&#64;subsection bl_notes Notes</p>
+<p>When filing bugs on the Blender loader, always give the Blender version (or, even better, post the file that caused the error).</p>
+</section>
+<section id="ifc">
+<span id="ai-ifc-overview"></span><h3>IFC<a class="headerlink" href="#ifc" title="Link to this heading"></a></h3>
+<p>This section contains implementation notes on the IFC-STEP importer.</p>
+</section>
+<section id="id5">
+<span id="id6"></span><h3>Overview<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>The library provides a partial implementation of the IFC2x3 industry standard for automatized exchange of CAE/architectural
+data sets. See <a class="reference external" href="http://en.wikipedia.org/wiki/Industry_Foundation_Classes">IFC</a> for more information on the format. We aim
+at getting as much 3D data out of the files as possible.</p>
+</section>
+<section id="ai-ifc-status">
+<span id="id8"></span><h3>Current status<a class="headerlink" href="#ai-ifc-status" title="Link to this heading"></a></h3>
+<p>IFC support is new and considered experimental. Please report any bugs you may encounter.</p>
+</section>
+<section id="notes">
+<span id="ai-ifc-notes"></span><h3>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Only the STEP-based encoding is supported. IFCZIP and IFCXML are not (but IFCZIP can simply be unzipped to get a STEP file).</p></li>
+<li><p>The importer leaves vertex coordinates untouched, but applies a global scaling to the root transform to
+convert from whichever unit the IFC file uses to &lt;i&gt;metres&lt;/i&gt;.</p></li>
+<li><p>If multiple geometric representations are provided, the choice of which one to load is based on how expensive a representation seems
+to be in terms of import time. The loader also avoids representation types for which it has known deficits.</p></li>
+<li><p>Not supported are arbitrary binary operations (binary clipping is implemented, though).</p></li>
+<li><p>Of the various relationship types that IFC knows, only aggregation, containment and material assignment are resolved and mapped to
+the output graph.</p></li>
+<li><p>The implementation knows only about IFC2X3 and applies this rule set to all models it encounters,
+regardless of their actual version. Loading of older or newer files may fail with parsing errors.</p></li>
+</ul>
+</section>
+<section id="metadata">
+<span id="ai-ifc-metadata"></span><h3>Metadata<a class="headerlink" href="#metadata" title="Link to this heading"></a></h3>
+<p>IFC file properties (IfcPropertySet) are kept as per-node metadata, see aiNode::mMetaData.</p>
+</section>
+<section id="ogre">
+<span id="ai-ogre"></span><h3>Ogre<a class="headerlink" href="#ogre" title="Link to this heading"></a></h3>
+<p><strong>ATTENTION</strong>: The Ogre-Loader is currently under development, many things have changed after this documentation was written, but they are not final enough to rewrite the documentation. So things may have changed by now!</p>
+<p>This section contains implementations notes for the OgreXML importer.</p>
+</section>
+<section id="ai-ogre-overview">
+<span id="id9"></span><h3>Overview<a class="headerlink" href="#ai-ogre-overview" title="Link to this heading"></a></h3>
+<p>Ogre importer is currently optimized for the Blender Ogre exporter because that’s the only one that I use. You can find the Blender Ogre exporter at: <a class="reference external" href="http://www.ogre3d.org/forums/viewtopic.php?f=8&amp;t=45922">OGRE3D forum</a></p>
+</section>
+<section id="what-will-be-loaded">
+<span id="ai-what"></span><h3>What will be loaded?<a class="headerlink" href="#what-will-be-loaded" title="Link to this heading"></a></h3>
+<p>Mesh: Faces, Positions, Normals, and all TexCoords. The Materialname will be used to load the material.</p>
+<p>Material: The right material in the file will be searched, the importer should work with materials who
+have 1 technique and 1 pass in this technique. From there, the texture name (for 1 color- and 1 normal map) and the
+materialcolors (but not in custom materials) will be loaded. Also, the materialname will be set.</p>
+<p>Skeleton: Skeleton with Bone hierarchy (Position and Rotation, but no Scaling in the skeleton is supported), names and transformations,
+animations with rotation, translation and scaling keys.</p>
+</section>
+<section id="how-to-export-files-from-blender">
+<span id="ai-export-blender"></span><h3>How to export Files from Blender<a class="headerlink" href="#how-to-export-files-from-blender" title="Link to this heading"></a></h3>
+<p>You can find information about how to use the Ogreexporter on your own, so here are just some options that you need, so the assimp
+importer will load everything correctly:</p>
+<ul class="simple">
+<li><p>Use either “Rendering Material” or “Custom Material” see &#64;ref material</p></li>
+<li><p>do not use “Flip Up Axies to Y”</p></li>
+<li><p>use “Skeleton name follow mesh”</p></li>
+</ul>
+</section>
+<section id="xml-format">
+<span id="ai-xml"></span><h3>XML-Format<a class="headerlink" href="#xml-format" title="Link to this heading"></a></h3>
+<p>There is a binary and an XML mesh Format from Ogre. This loader can only
+Handle XML files, but don’t panic, there is a command line converter, which you can use
+to create XML files from Binary Files. Just look on the Ogre page for it.</p>
+<p>Currently, you can only load meshes. So you will need to import the .mesh.xml file, the loader will
+try to find the appendant material and skeleton file.</p>
+<p>The skeleton file must have the same name as the mesh file, e.g. fish.mesh.xml and fish.skeleton.xml.</p>
+<p>&#64;subsection material Materials
+The material file can have the same name as the mesh file (if the file is model.mesh or model.mesh.xml the
+loader will try to load model.material),
+or you can use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Importer</span><span class="p">::</span><span class="n">Importer</span><span class="p">::</span><span class="n">SetPropertyString</span><span class="p">(</span><span class="n">AI_CONFIG_IMPORT_OGRE_MATERIAL_FILE</span><span class="p">,</span> <span class="s2">&quot;materiafile.material&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to specify the name of the material file. This is especially useful if multiple materials a stored in a single file.
+The importer will first try to load the material with the same name as the mesh and only if this can’t be opened try
+to load the alternate material file. The default material filename is “Scene.material”.</p>
+<p>We suggest that you use custom materials, because they support multiple textures (like colormap and normalmap). First of all you
+should read the custom material sektion in the Ogre Blender exporter Help File, and than use the assimp.tlp template, which you
+can find in scripts/OgreImpoter/Assimp.tlp in the assimp source. If you don’t set all values, don’t worry, they will be ignored during import.</p>
+<p>If you want more properties in custom materials, you can easily expand the ogre material loader, it will be just a few lines for each property.
+Just look in OgreImporterMaterial.cpp</p>
+</section>
+<section id="properties">
+<h3>Properties<a class="headerlink" href="#properties" title="Link to this heading"></a></h3>
+<ul>
+<li><p>IMPORT_OGRE_TEXTURETYPE_FROM_FILENAME: Normally, a texture is loaded as a colormap, if no
+target is specified in the
+materialfile. Is this switch is enabled, texture names ending with _n, _l, _s
+are used as normalmaps, lightmaps or specularmaps.</p>
+<p>Property type: Bool. Default value: false.</p>
+</li>
+<li><p>IMPORT_OGRE_MATERIAL_FILE: Ogre Meshes contain only the MaterialName, not the MaterialFile.
+If there
+is no material file with the same name as the material, Ogre Importer will
+try to load this file and search the material in it.</p>
+<p>Property type: String. Default value: guessed.</p>
+</li>
+</ul>
+</section>
+<section id="ai-properties">
+<span id="id10"></span><h3>Properties<a class="headerlink" href="#ai-properties" title="Link to this heading"></a></h3>
+<p>You can use properties to chance the behavior of you importer. In order to do so, you have to override BaseImporter::SetupProperties, and specify
+you custom properties in config.h. Just have a look to the other AI_CONFIG_IMPORT_* defines and you will understand, how it works.</p>
+<p>The properties can be set with Importer::SetProperty***() and can be accessed in your SetupProperties function with Importer::GetProperty***(). You can
+store the properties as a member variable of your importer, they are thread safe.</p>
+</section>
+<section id="notes-for-text-importers">
+<span id="ai-tnote"></span><h3>Notes for text importers<a class="headerlink" href="#notes-for-text-importers" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Try to make your parser as flexible as possible. Don’t rely on particular layout, whitespace/tab style,
+except if the file format has a strict definition, in which case you should always warn about spec violations.
+But the general rule of thumb is <em>be strict in what you write and tolerant in what you accept</em>.</p></li>
+<li><p>Call <strong>Assimp::BaseImporter::ConvertToUTF8()</strong> before you parse anything to convert foreign encodings to UTF-8.
+That’s not necessary for XML importers, which must use the provided XML-Parser for reading.</p></li>
+</ul>
+</section>
+<section id="notes-for-binary-importers">
+<span id="ai-bnote"></span><h3>Notes for binary importers<a class="headerlink" href="#notes-for-binary-importers" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Take care of endianness issues! Assimp importers mostly support big-endian platforms, which define the &lt;tt&gt;AI_BUILD_BIG_ENDIAN&lt;/tt&gt; constant.
+See the next section for a list of utilities to simplify this task.</p></li>
+<li><p>Don’t trust the input data! Check all offsets!</p></li>
+</ul>
+</section>
+<section id="utilities">
+<span id="ai-util"></span><h3>Utilities<a class="headerlink" href="#utilities" title="Link to this heading"></a></h3>
+<p>Mixed stuff for internal use by loaders, mostly documented (most of them are already included by <em>AssimpPCH.h</em>):</p>
+<ul class="simple">
+<li><p><strong>ByteSwapper</strong> (<em>ByteSwapper.h</em>)   - manual byte swapping stuff for binary loaders.</p></li>
+<li><p><strong>StreamReader</strong> (<em>StreamReader.h</em>) - safe, endianess-correct, binary reading.</p></li>
+<li><p><strong>XmlParser</strong> (<em>XmlParser.hh</em>)      - The XML-Parser used in Asset-importer-Lib</p></li>
+<li><p><strong>CommentRemover</strong> (<em>RemoveComments.h</em>) - remove single-line and multi-line comments from a text file.</p></li>
+<li><p>fast_atof, strtoul10, strtoul16, SkipSpaceAndLineEnd, SkipToNextToken .. large family of low-level
+parsing functions, mostly declared in <em>fast_atof.h</em>, <em>StringComparison.h</em> and <em>ParsingUtils.h</em> (a collection that grew
+historically, so don’t expect perfect organization).</p></li>
+<li><p><strong>ComputeNormalsWithSmoothingsGroups()</strong> (<em>SmoothingGroups.h</em>) - Computes normal vectors from plain old smoothing groups.</p></li>
+<li><p><strong>SkeletonMeshBuilder</strong> (<em>SkeletonMeshBuilder.h</em>) - generate a dummy mesh from a given (animation) skeleton.</p></li>
+<li><p><strong>StandardShapes</strong> (<em>StandardShapes.h</em>) - generate meshes for standard solids, such as platonic primitives, cylinders or spheres.</p></li>
+<li><p><strong>BatchLoader</strong> (<em>BaseImporter.h</em>) - manage imports from external files. Useful for file formats
+which spread their data across multiple files.</p></li>
+<li><p><strong>SceneCombiner</strong> (<em>SceneCombiner.h</em>) - exhaustive toolset to merge multiple scenes. Useful for file formats
+which spread their data across multiple files.</p></li>
+</ul>
+</section>
+<section id="filling-materials">
+<span id="ai-mat"></span><h3>Filling materials<a class="headerlink" href="#filling-materials" title="Link to this heading"></a></h3>
+<p>The required definitions zo set/remove/query keys in #ai_material structures are declared in <em>MaterialSystem.h</em>, in a
+#aiMaterial derivate called #aiMaterial. The header is included by AssimpPCH.h, so you don’t need to bother.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aiMaterial</span><span class="o">*</span> <span class="n">mat</span> <span class="o">=</span> <span class="n">new</span> <span class="n">aiMaterial</span><span class="p">();</span>
+
+<span class="n">const</span> <span class="nb">float</span> <span class="n">spec</span> <span class="o">=</span> <span class="mf">16.</span><span class="n">f</span><span class="p">;</span>
+<span class="n">mat</span><span class="o">-&gt;</span><span class="n">AddProperty</span><span class="p">(</span><span class="o">&amp;</span><span class="n">spec</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">AI_MATKEY_SHININESS</span><span class="p">);</span>
+
+<span class="o">//</span><span class="nb">set</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">material</span><span class="p">:</span>
+<span class="n">NewMaterial</span><span class="o">-&gt;</span><span class="n">AddProperty</span><span class="p">(</span><span class="o">&amp;</span><span class="n">aiString</span><span class="p">(</span><span class="n">MaterialName</span><span class="o">.</span><span class="n">c_str</span><span class="p">()),</span> <span class="n">AI_MATKEY_NAME</span><span class="p">);</span><span class="o">//</span><span class="n">MaterialName</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span>
+
+<span class="o">//</span><span class="nb">set</span> <span class="n">the</span> <span class="n">first</span> <span class="n">diffuse</span> <span class="n">texture</span>
+<span class="n">NewMaterial</span><span class="o">-&gt;</span><span class="n">AddProperty</span><span class="p">(</span><span class="o">&amp;</span><span class="n">aiString</span><span class="p">(</span><span class="n">Texturename</span><span class="o">.</span><span class="n">c_str</span><span class="p">()),</span> <span class="n">AI_MATKEY_TEXTURE</span><span class="p">(</span><span class="n">aiTextureType_DIFFUSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span><span class="o">//</span><span class="n">again</span><span class="p">,</span> <span class="n">Texturename</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="appendix-a">
+<span id="ai-appa"></span><h2>Appendix A<a class="headerlink" href="#appendix-a" title="Link to this heading"></a></h2>
+<section id="template-for-baseimporter-s-abstract-methods">
+<h3>Template for BaseImporter’s abstract methods<a class="headerlink" href="#template-for-baseimporter-s-abstract-methods" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>// -------------------------------------------------------------------------------
+// Returns whether the class can handle the format of the given file.
+bool xxxxImporter::CanRead( const std::string&amp; pFile, IOSystem* pIOHandler,
+      bool checkSig) const {
+    const std::string extension = GetExtension(pFile);
+    if(extension == &quot;xxxx&quot;) {
+        return true;
+    }
+    if (!extension.length() || checkSig) {
+        // no extension given, or we&#39;re called a second time because no
+        // suitable loader was found yet. This means, we&#39;re trying to open
+        // the file and look for and hints to identify the file format.
+        // #Assimp::BaseImporter provides some utilities:
+        //
+        // #Assimp::BaseImporter::SearchFileHeaderForToken - for text files.
+        // It reads the first lines of the file and does a substring check
+        // against a given list of &#39;magic&#39; strings.
+        //
+        // #Assimp::BaseImporter::CheckMagicToken - for binary files. It goes
+        // to a particular offset in the file and and compares the next words
+        // against a given list of &#39;magic&#39; tokens.
+
+        // These checks MUST be done (even if !checkSig) if the file extension
+        // is not exclusive to your format. For example, .xml is very common
+        // and (co)used by many formats.
+    }
+    return false;
+}
+
+// -------------------------------------------------------------------------------
+// Get list of file extensions handled by this loader
+void xxxxImporter::GetExtensionList(std::set&lt;std::string&gt;&amp; extensions) {
+    extensions.insert(&quot;xxx&quot;);
+}
+
+// -------------------------------------------------------------------------------
+void xxxxImporter::InternReadFile( const std::string&amp; pFile,
+      aiScene* pScene, IOSystem* pIOHandler) {
+    std::unique_ptr&lt;IOStream&gt; file( pIOHandler-&gt;Open( pFile, &quot;rb&quot;));
+
+    // Check whether we can read from the file
+    if( file.get() == NULL) {
+        throw DeadlyImportError( &quot;Failed to open xxxx file &quot;, pFile, &quot;.&quot;);
+    }
+
+    // Your task: fill pScene
+    // Throw a ImportErrorException with a meaningful (!) error message if
+    // something goes wrong.
+}
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../about/quickstart.html" class="btn btn-neutral float-left" title="Data Structures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../developer/developer.html" class="btn btn-neutral float-right" title="The Developer Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2025, Kim Kulling.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
